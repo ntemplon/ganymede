@@ -5,10 +5,15 @@
  */
 package com.ganymede.property;
 
+import java.util.EventListener;
+
 /**
  *
  * @author NathanT
+ * @param <T>
  */
-public class ObjectProperty {
+public interface PropertyChangeListener<T> extends EventListener {
+    
+    void changed(T oldValue, T newValue);
     
 }
