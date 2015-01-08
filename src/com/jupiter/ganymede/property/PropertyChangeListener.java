@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ganymede.property;
+package com.jupiter.ganymede.property;
 
 import java.util.EventListener;
 
@@ -13,7 +13,5 @@ import java.util.EventListener;
  * @param <T>
  */
 public interface PropertyChangeListener<T> extends EventListener {
-    
-    void changed(T oldValue, T newValue);
-    
+    void changed(Property<T> property, T oldValue, T newValue);
 }
