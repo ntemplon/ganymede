@@ -5,6 +5,8 @@
  */
 package com.jupiter.ganymede.math.vector;
 
+import com.jupiter.ganymede.math.geometry.Angle;
+import com.jupiter.ganymede.math.geometry.Plane3;
 import com.jupiter.ganymede.math.matrix.Matrix;
 import java.util.Arrays;
 
@@ -34,6 +36,10 @@ public class Vector {
     public int getDimension() {
         return dimension;
     }
+    
+    public Vector getUnitVector() {
+        return this.times(1.0 / this.norm());
+    }
 
 
     // Initialization
@@ -54,6 +60,10 @@ public class Vector {
             newValues[i - 1] = this.getComponent(i) + other.getComponent(i);
         }
         return new Vector(newValues);
+    }
+    
+    public Vector minus(Vector other) {
+        return this.plus(other.times(-1.0));
     }
 
     public Vector times(double scalar) {
@@ -88,6 +98,28 @@ public class Vector {
             product += this.getComponent(i) * other.getComponent(i);
         }
         return product;
+    }
+    
+    public double norm() {
+        return Math.sqrt(this.dot(this));
+    }
+    
+    public Angle angleTo(Vector other) {
+        if (other.getDimension() != this.getDimension()) {
+            throw new IllegalArgumentException("The angle between two vectors is only defined for vectors of the same dimension!");
+        }
+        
+        return new Angle(this.dot(other) / (this.norm() * other.norm()), Angle.TrigFunction.COSINE);
+    }
+    
+    public Vector projectionOnto(Vector other) {
+        Vector unit = other.getUnitVector();
+        return unit.times(this.dot(unit));
+    }
+    
+    public Vector projectionOnto(Plane3 plane) {
+        Vector normal = plane.getNormal();
+        return this.minus(this.projectionOnto(normal));
     }
 
     @Override
