@@ -112,14 +112,12 @@ public class Vector {
         return new Angle(this.dot(other) / (this.norm() * other.norm()), Angle.TrigFunction.COSINE);
     }
     
-    public Vector projectionOnto(Vector other) {
-        Vector unit = other.getUnitVector();
-        return unit.times(this.dot(unit));
+    public double scalarProjectionOnto(Vector other) {
+        return this.dot(other.getUnitVector());
     }
     
-    public Vector projectionOnto(Plane3 plane) {
-        Vector normal = plane.getNormal();
-        return this.minus(this.projectionOnto(normal));
+    public Vector vectorProjectionOnto(Vector other) {
+        return other.getUnitVector().times(this.scalarProjectionOnto(other));
     }
 
     @Override

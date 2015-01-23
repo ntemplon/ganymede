@@ -5,6 +5,7 @@
  */
 package com.jupiter.ganymede.math.vector;
 
+import com.jupiter.ganymede.math.geometry.Angle;
 import com.jupiter.ganymede.math.geometry.Plane3;
 
 /**
@@ -12,6 +13,19 @@ import com.jupiter.ganymede.math.geometry.Plane3;
  * @author Nathan Templon
  */
 public class Vector3 extends Vector {
+    
+    // Factory Methods
+    public static Vector3 fromVector(Vector other) {
+        if (other.getDimension() != 3) {
+            throw new IllegalArgumentException("Vector3 Objects can only be constructed from Vectors with 3 components!");
+        }
+        return new Vector3(
+                other.getComponent(1),
+                other.getComponent(2),
+                other.getComponent(3)
+        );
+    }
+    
 
     // Fields
     public final double x;
@@ -75,12 +89,11 @@ public class Vector3 extends Vector {
                 this.z * scalar
         );
     }
-
+    
     @Override
-    public Vector3 projectionOnto(Vector other) {
+    public Vector3 vectorProjectionOnto(Vector other) {
         if (other.getDimension() == 3) {
-            Vector unit = other.getUnitVector();
-            Vector projection = unit.times(this.dot(unit));
+            Vector projection = super.vectorProjectionOnto(other);
             return new Vector3(
                     projection.getComponent(1),
                     projection.getComponent(2),
@@ -90,10 +103,17 @@ public class Vector3 extends Vector {
         throw new IllegalArgumentException();
     }
 
-    @Override
-    public Vector3 projectionOnto(Plane3 plane) {
+    public Vector3 vectorProjectionOnto(Plane3 plane) {
         Vector3 normal = plane.getNormal();
-        return this.minus(this.projectionOnto(normal));
+        return this.minus(this.vectorProjectionOnto(normal));
+    }
+    
+    public double scalarProjectionOnto(Plane3 plane) {
+        return this.vectorProjectionOnto(plane).norm();
+    }
+    
+    public Angle angleTo(Plane3 plane) {
+        return this.angleTo(this.vectorProjectionOnto(plane));
     }
 
 }

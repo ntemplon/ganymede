@@ -5,11 +5,15 @@
  */
 package com.jupiter.ganymede.math.matrix;
 
+import com.jupiter.ganymede.math.geometry.Angle;
+import com.jupiter.ganymede.math.geometry.Angle.AngleType;
 import com.jupiter.ganymede.math.vector.Vector;
 import java.awt.Dimension;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 /**
@@ -27,6 +31,14 @@ public class MatrixTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
 
     /**
@@ -188,6 +200,68 @@ public class MatrixTest {
         Vector expResult = new Vector(19, 22, 59);
         Vector result = instance.times(vector);
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of identity method, of class Matrix.
+     */
+    @Test
+    public void testIdentity() {
+        System.out.println("identity");
+        int dimension = 3;
+        Matrix expResult = new Matrix(new double[][]
+                {{1, 0, 0},
+                {0, 1, 0},
+                {0, 0, 1}}
+        );
+        Matrix result = Matrix.identity(dimension);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of euler3 method, of class Matrix.
+     */
+    @Test
+    public void testEuler3() {
+        System.out.println("euler3");
+        Angle angle = new Angle(30, AngleType.DEGREES);
+        
+        Matrix expResult1 = new Matrix(new double[][] {
+            {1.0, 0.0, 0.0},
+            {0.0, Math.sqrt(3.0) / 2.0, -0.5},
+            {0.0, 0.5, Math.sqrt(3.0) / 2.0}
+        });
+        Matrix result1 = Matrix.euler3(angle, 1);
+        assertMatrixEquals(expResult1, result1);
+        
+        Matrix expResult2 = new Matrix(new double[][] {
+            {Math.sqrt(3.0) / 2.0, 0.0, 0.5},
+            {0.0, 1.0, 0.0},
+            {-0.5, 0.0, Math.sqrt(3.0) / 2.0}
+        });
+        Matrix result2 = Matrix.euler3(angle, 2);
+        assertMatrixEquals(expResult2, result2);
+        
+        Matrix expResult3 = new Matrix(new double[][] {
+            {Math.sqrt(3.0) / 2.0, -0.5, 0.0},
+            {0.5, Math.sqrt(3.0) / 2.0, 0.0},
+            {0.0, 0.0, 1.0}
+        });
+        Matrix result3 = Matrix.euler3(angle, 3);
+        assertMatrixEquals(expResult3, result3);
+    }
+    
+    
+    // Utility methods
+    private void assertMatrixEquals(Matrix matrix1, Matrix matrix2) {
+        if (!matrix1.getDimension().equals(matrix2.getDimension())) {
+            assert(false);
+        }
+        for(int i = 1; i <= matrix1.getHeight(); i++) {
+            for (int j = 1; j <= matrix1.getWidth(); j++) {
+                assertEquals(matrix1.getComponent(i, j), matrix2.getComponent(i, j), 1e-6);
+            }
+        }
     }
 
 }

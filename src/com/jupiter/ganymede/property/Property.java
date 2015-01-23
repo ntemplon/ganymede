@@ -5,9 +5,7 @@
  */
 package com.jupiter.ganymede.property;
 
-import com.jupiter.ganymede.property.PropertyBinding.EvaluatableBinding;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.jupiter.ganymede.event.Event;
 
 /**
  *
@@ -16,9 +14,12 @@ import java.util.Set;
  */
 public class Property<T> {
 
+    // Events
+    public final Event<PropertyChangedArgs<T>> changed = new Event<>();
+    
+    
     // Fields
     private T value;
-    private final Set<PropertyChangeListener<T>> listeners = new LinkedHashSet<>();
     private PropertyBinding binding;
 
 
@@ -59,29 +60,9 @@ public class Property<T> {
         T oldValue = this.value;
         this.value = value;
 
-        this.listeners.stream().forEach((PropertyChangeListener<T> listener) -> {
-            listener.changed(this, oldValue, this.value);
-        });
-    }
-
-    /**
-     * Adds a property change listener, which will fire a chanced event whenever the set method is called (even if the
-     * value is not changed).
-     *
-     * @param listener
-     */
-    public void addPropertyChangeListener(PropertyChangeListener<T> listener) {
-        this.listeners.add(listener);
-    }
-
-    /**
-     * Removes a property change listener from the list of listeners, if present.
-     *
-     * @param listener
-     * @return Returns true if the listener was successfully removed, false if it was not.
-     */
-    public boolean removePropertyChangeListener(PropertyChangeListener<T> listener) {
-        return this.listeners.remove(listener);
+        if (!oldValue.equals(this.value)) {
+            this.changed.dispatch(new PropertyChangedArgs<>(this, oldValue, this.value));
+        }
     }
 
     /**
@@ -115,6 +96,25 @@ public class Property<T> {
             this.binding.unbind();
             this.binding = null;
         }
+    }
+    
+    
+    // Inner Classes
+    public static class PropertyChangedArgs<T> {
+        
+        // Fields
+        public final Property<T> property;
+        public final T oldValue;
+        public final T newValue;
+        
+        
+        // Initialization
+        public PropertyChangedArgs(Property<T> property, T oldValue, T newValue) {
+            this.property = property;
+            this.oldValue = oldValue;
+            this.newValue = newValue;
+        }
+        
     }
 
 }

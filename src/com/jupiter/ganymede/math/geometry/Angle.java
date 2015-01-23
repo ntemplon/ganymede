@@ -63,12 +63,14 @@ public class Angle {
 
         /**
          * Between 0 and 2 PI (360 degrees)
+         *//**
+         * Between 0 and 2 PI (360 degrees)
          */
         FullCircle,
         /**
          * Between +- 2 PI (+- 180 degrees)
          */
-        PlusMin180
+        PlusMinus180
     }
 
 
@@ -125,7 +127,7 @@ public class Angle {
             case FullCircle:
                 return this.getMeasure();
 
-            case PlusMin180:
+            case PlusMinus180:
                 if (this.getMeasure() < Math.PI) {
                     return this.getMeasure();
                 }

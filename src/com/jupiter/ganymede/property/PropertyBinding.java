@@ -5,12 +5,15 @@
  */
 package com.jupiter.ganymede.property;
 
+import com.jupiter.ganymede.event.Listener;
+import com.jupiter.ganymede.property.Property.PropertyChangedArgs;
+
 /**
  *
  * @author NathanT
  * @param <T>
  */
-public class PropertyBinding<T> implements PropertyChangeListener {
+public class PropertyBinding<T> implements Listener<PropertyChangedArgs<T>> {
     
     // Fields
     private Property property;
@@ -27,7 +30,7 @@ public class PropertyBinding<T> implements PropertyChangeListener {
     
     // Public Methods
     @Override
-    public final void changed(Property property, Object oldValue, Object newValue) {
+    public final void handle(PropertyChangedArgs<T> args) {
         this.property.set(this.binding.evaluate());
     }
     
@@ -36,13 +39,13 @@ public class PropertyBinding<T> implements PropertyChangeListener {
     protected final void bind(Property<T> property) {
         this.property.set(this.binding.evaluate());
         for (Property dependency : this.dependencies) {
-            dependency.addPropertyChangeListener(this);
+            dependency.changed.addListener(this);
         }
     }
     
     protected final void unbind() {
         for (Property dependency : this.dependencies) {
-            dependency.removePropertyChangeListener(this);
+            dependency.changed.removeListener(this);
         }
     }
     

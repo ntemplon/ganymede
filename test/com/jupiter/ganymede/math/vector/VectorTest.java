@@ -5,11 +5,15 @@
  */
 package com.jupiter.ganymede.math.vector;
 
+import com.jupiter.ganymede.math.geometry.Angle;
+import com.jupiter.ganymede.math.geometry.Angle.AngleType;
 import com.jupiter.ganymede.math.matrix.Matrix;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
@@ -26,6 +30,14 @@ public class VectorTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
     
     /**
@@ -141,6 +153,84 @@ public class VectorTest {
     @Test
     public void testHashCode() {
         
+    }
+
+    /**
+     * Test of getUnitVector method, of class Vector.
+     */
+    @Test
+    public void testGetUnitVector() {
+        System.out.println("getUnitVector");
+        Vector instance = new Vector(1, -2, 3);
+        Vector expResult = new Vector(1.0 / Math.sqrt(14), -2.0 / Math.sqrt(14), 3.0 / Math.sqrt(14));
+        Vector result = instance.getUnitVector();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of minus method, of class Vector.
+     */
+    @Test
+    public void testMinus() {
+        System.out.println("minus");
+        Vector other = new Vector(1, 2, 3);
+        Vector instance = new Vector(4, -6, 3);
+        Vector expResult = new Vector(3, -8, 0);
+        Vector result = instance.minus(other);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of norm method, of class Vector.
+     */
+    @Test
+    public void testNorm() {
+        System.out.println("norm");
+        Vector instance = new Vector(1, 2, 3);
+        double expResult = Math.sqrt(14);
+        double result = instance.norm();
+        assertEquals(expResult, result, 0.0);
+    }
+
+    /**
+     * Test of angleTo method, of class Vector.
+     */
+    @Test
+    public void testAngleTo() {
+        System.out.println("angleTo");
+        Vector other = new Vector(1, 0, 0);
+        Vector instance = new Vector(1, 1, 0);
+        Angle expResult = new Angle(45, AngleType.DEGREES);
+        Angle result = instance.angleTo(other);
+        Angle difference = result.plus(expResult.times(-1.0));
+        assert(difference.getMeasure(Angle.MeasureRange.PlusMinus180) < 1e-6);
+    }
+
+    /**
+     * Test of scalarProjectionOnto method, of class Vector.
+     */
+    @Test
+    public void testScalarProjectionOnto() {
+        System.out.println("scalarProjectionOnto");
+        Vector other = new Vector(1, 1, 0);
+        Vector instance = new Vector(1, 0, 0);
+        double expResult = Math.sqrt(0.5);
+        double result = instance.scalarProjectionOnto(other);
+        assertEquals(expResult, result, 1e-6);
+    }
+
+    /**
+     * Test of vectorProjectionOnto method, of class Vector.
+     */
+    @Test
+    public void testVectorProjectionOnto() {
+        System.out.println("vectorProjectionOnto");
+        Vector other = new Vector(1, 1, 0);
+        Vector instance = new Vector(1, 0, 0);
+        Vector expResult = new Vector(0.5, 0.5, 0);
+        Vector result = instance.vectorProjectionOnto(other);
+        Vector difference = result.minus(expResult);
+        assert(difference.norm() < 1e-6);
     }
     
 }
