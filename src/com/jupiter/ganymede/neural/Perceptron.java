@@ -7,11 +7,13 @@ package com.jupiter.ganymede.neural;
 
 /**
  *
- * @author Nathan Templon
- * @param <T>
+ * @author nathan
  */
-public interface NetworkTrainer<T extends NeuralNetwork> {
+public class Perceptron extends NeuralNetwork {
     
-    boolean train(T network);
+    // Initialization
+    public Perceptron(double defaultWeight, NeuralNetworkInputLayer input, NeuralNetworkLayer output) {
+        super(defaultWeight, input, output);
+    }
     
 }

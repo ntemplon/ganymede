@@ -62,6 +62,7 @@ public final class Synapse {
         this.source.getFiredEvent().addListener(
                 (AbstractNeuron.NeuronFiredArgs args) -> Synapse.this.value = args.value * Synapse.this.getWeight()
         );
+        this.source.addAxonConnection(this);
         this.target.addDendriteConnection(this);
     }
     

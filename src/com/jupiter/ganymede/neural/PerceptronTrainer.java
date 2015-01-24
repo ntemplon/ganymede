@@ -12,8 +12,9 @@ import java.util.Set;
 /**
  *
  * @author Nathan Templon
+ * @param <T>
  */
-public class PerceptronTrainer implements NetworkTrainer {
+public class PerceptronTrainer<T extends Perceptron> implements NetworkTrainer<T> {
     
     // Fields
     private final double trainingRate;
@@ -28,9 +29,9 @@ public class PerceptronTrainer implements NetworkTrainer {
     
     // Public Methods
     @Override
-    public boolean train(NeuralNetwork network) {
-        // Do voodoo here
-        return false;
+    public boolean train(T network) {
+        while (trainOnce(network)) {}
+        return true;
     }
     
     public boolean addTrainingPair(TrainingPair pair) {
@@ -39,6 +40,32 @@ public class PerceptronTrainer implements NetworkTrainer {
     
     public boolean removeTrainingPair(TrainingPair pair) {
         return this.trainingPairs.remove(pair);
+    }
+    
+    
+    // Private Methods
+    private boolean trainOnce(Perceptron network) {
+        boolean changed = false;
+        
+        for(TrainingPair pair : this.trainingPairs) {
+            Vector output = network.evaluate(pair.input);
+            Vector error = pair.expectedOutput.minus(output);
+            int neuralNumber = 1;
+            for(Neuron out : network.outputLayer.getNeurons()) {
+                double specificError = error.getComponent(neuralNumber);
+                
+                for (Synapse dendrite : out.getDendriteConnections()) {
+                    if (Math.abs(specificError) > Math.abs(dendrite.getWeight() * 1e-6)) {
+                        dendrite.setWeight(dendrite.getWeight() + this.trainingRate * specificError * dendrite.getValue());
+                        changed = true;
+                    }
+                }
+                
+                neuralNumber++;
+            }
+        }
+        
+        return changed;
     }
     
     
