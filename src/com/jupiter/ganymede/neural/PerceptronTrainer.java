@@ -29,9 +29,14 @@ public class PerceptronTrainer<T extends Perceptron> implements NetworkTrainer<T
     
     // Public Methods
     @Override
-    public boolean train(T network) {
-        while (trainOnce(network)) {}
-        return true;
+    public boolean train(T network, int maxAttempts) {
+        int numAttempts = 0;
+        boolean trained = false;
+        while (!trained && numAttempts <= maxAttempts) {
+            trained = !this.trainOnce(network);
+            numAttempts++;
+        }
+        return trained;
     }
     
     public boolean addTrainingPair(TrainingPair pair) {
@@ -56,7 +61,7 @@ public class PerceptronTrainer<T extends Perceptron> implements NetworkTrainer<T
                 
                 for (Synapse dendrite : out.getDendriteConnections()) {
                     if (Math.abs(specificError) > Math.abs(dendrite.getWeight() * 1e-6)) {
-                        dendrite.setWeight(dendrite.getWeight() + this.trainingRate * specificError * dendrite.getValue());
+                        dendrite.setWeight(dendrite.getWeight() + this.trainingRate * specificError * dendrite.getUnweightedValue());
                         changed = true;
                     }
                 }

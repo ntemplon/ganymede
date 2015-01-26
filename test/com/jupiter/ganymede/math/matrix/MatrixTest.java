@@ -264,4 +264,136 @@ public class MatrixTest {
         }
     }
 
+    /**
+     * Test of isSquare method, of class Matrix.
+     */
+    @Test
+    public void testIsSquare() {
+        System.out.println("isSquare");
+        Matrix instance = new Matrix(new double[][] {
+            {0, 0},
+            {0, 0}
+        });
+        boolean expResult = true;
+        boolean result = instance.isSquare();
+        assertEquals(expResult, result);
+        
+        Matrix instance2 = new Matrix(new double[][] {
+            {1, 0}
+        });
+        boolean expResult2 = false;
+        boolean result2 = instance2.isSquare();
+        assertEquals(expResult2, result2);
+    }
+
+    /**
+     * Test of norm method, of class Matrix.
+     */
+    @Test
+    public void testNorm() {
+        System.out.println("norm");
+        Matrix instance = new Matrix(new double[][] {
+            {1, 3},
+            {5, 7}
+        });
+        double expResult = Math.sqrt(1 + 9 + 25 + 49);
+        double result = instance.norm();
+        assertEquals(expResult, result, 1e-9);
+    }
+
+    /**
+     * Test of inverse method, of class Matrix.
+     */
+    @Test
+    public void testInverse() {
+        System.out.println("inverse");
+        Matrix instance = new Matrix(new double[][] {
+            {1, 3, -2, 7},
+            {3, 5, 1, -3},
+            {9, -9, 2, 3},
+            {1, 3, -2, 10}
+        });
+        Matrix expResult = new Matrix(new double[][] {
+            {193.0, 36.0, 39.0, -136.0},
+            {-51.0, 60.0, -21.0, 60.0},
+            {-840.0, 108.0, -12.0, 624.0},
+            {-172.0, 0.0, 0.0, 172.0}
+        }).times(1.0 / 516.0);
+        Matrix result = instance.inverse();
+        
+        assert(result.plus(expResult.times(-1.0)).norm() < 1e-6);
+    }
+
+    /**
+     * Test of det method, of class Matrix.
+     */
+    @Test
+    public void testDet() {
+        System.out.println("det");
+        Matrix instance = new Matrix(new double[][] {
+            {1, -2, 5},
+            {6, 7, 2},
+            {-3, 4, 8}
+        });
+        double expResult = 381.0;
+        double result = instance.det();
+        assertEquals(expResult, result, 1e-6);
+    }
+
+    /**
+     * Test of minor method, of class Matrix.
+     */
+    @Test
+    public void testMinor() {
+        System.out.println("minor");
+        int row = 1;
+        int column = 2;
+        Matrix instance = new Matrix(new double[][] {
+            {1, 3},
+            {5, 7}
+        });
+        Matrix expResult = new Matrix(new double[][] {
+            {5}
+        });
+        Matrix result = instance.minor(row, column);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of cofactor method, of class Matrix.
+     */
+    @Test
+    public void testCofactor() {
+        System.out.println("cofactor");
+        int row = 2;
+        int col = 1;
+        Matrix instance = new Matrix(new double[][] {
+            {1, 3},
+            {5, 7}
+        });
+        double expResult = -3.0;
+        double result = instance.cofactor(row, col);
+        assertEquals(expResult, result, 1e-9);
+    }
+
+    /**
+     * Test of rref method, of class Matrix.
+     */
+    @Test
+    public void testRref() {
+        System.out.println("rref");
+        Matrix instance = new Matrix(new double[][] {
+            {1, 3, -2, 7},
+            {3, 5, 1, -3},
+            {9, -9, 2, 3}
+        });
+        Matrix expResult = new Matrix(new double[][] {
+            {1.0, 0.0, 0.0, 34.0 / 43.0},
+            {0.0, 1.0, 0.0, -15.0 / 43.0},
+            {0.0, 0.0, 1.0, -156.0 / 43.0}
+        });
+        Matrix result = instance.rref();
+        assert(result.plus(expResult.times(-1.0)).norm() < 1e-6);
+    }
+
 }

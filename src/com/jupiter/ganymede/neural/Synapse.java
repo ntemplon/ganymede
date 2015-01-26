@@ -19,7 +19,8 @@ public final class Synapse {
     private final Neuron source;
     private final Neuron target;
     private double weight;
-    
+
+    private double unweightedValue;
     private double value;
 
 
@@ -44,6 +45,14 @@ public final class Synapse {
         }
     }
 
+    public double getValue() {
+        return this.value;
+    }
+
+    public double getUnweightedValue() {
+        return this.unweightedValue;
+    }
+
 
     // Initialization
     public Synapse(Neuron source, Neuron target, double weight) {
@@ -51,36 +60,33 @@ public final class Synapse {
         this.target = target;
         this.weight = weight;
     }
-    
-    
+
+
     // Public Methods
-    public double getValue() {
-        return this.value;
-    }
-    
     public void connect() {
-        this.source.getFiredEvent().addListener(
-                (AbstractNeuron.NeuronFiredArgs args) -> Synapse.this.value = args.value * Synapse.this.getWeight()
-        );
+        this.source.getFiredEvent().addListener((AbstractNeuron.NeuronFiredArgs args) -> {
+            Synapse.this.unweightedValue = args.value;
+            Synapse.this.value = args.value * Synapse.this.getWeight();
+        });
         this.source.addAxonConnection(this);
         this.target.addDendriteConnection(this);
     }
-    
-    
+
+
     // Inner Classes
     public static class WeightChangedArgs {
-        
+
         // Fields
         public final double oldWeight;
         public final double newWeight;
-        
-        
+
+
         // Initialization
         public WeightChangedArgs(double oldWeight, double newWeight) {
             this.oldWeight = oldWeight;
             this.newWeight = newWeight;
         }
-        
+
     }
 
 }

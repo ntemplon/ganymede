@@ -12,6 +12,6 @@ package com.jupiter.ganymede.neural;
  */
 public interface NetworkTrainer<T extends NeuralNetwork> {
     
-    boolean train(T network);
+    boolean train(T network, int maxAttempts);
     
 }

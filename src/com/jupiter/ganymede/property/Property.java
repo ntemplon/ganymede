@@ -60,7 +60,7 @@ public class Property<T> {
         T oldValue = this.value;
         this.value = value;
 
-        if (!oldValue.equals(this.value)) {
+        if ((oldValue == null && value == null) || (oldValue != null && !oldValue.equals(this.value))) {
             this.changed.dispatch(new PropertyChangedArgs<>(this, oldValue, this.value));
         }
     }
