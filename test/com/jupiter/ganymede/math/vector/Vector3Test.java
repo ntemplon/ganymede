@@ -141,7 +141,7 @@ public class Vector3Test {
         Vector3 instance = new Vector3(1, 1, 1);
         Angle expResult = new Angle(45, AngleType.DEGREES);
         Angle result = instance.angleTo(plane);
-        assert(result.plus(expResult.times(-1.0)).getMeasure(Angle.MeasureRange.PlusMinus180) < 1e-6);
+        assert(result.plus(expResult.times(-1.0)).getMeasure(Angle.MeasureRange.PlusMinus) < 1e-6);
     }
 
     /**

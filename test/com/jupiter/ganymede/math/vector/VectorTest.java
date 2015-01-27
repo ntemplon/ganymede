@@ -203,7 +203,7 @@ public class VectorTest {
         Angle expResult = new Angle(45, AngleType.DEGREES);
         Angle result = instance.angleTo(other);
         Angle difference = result.plus(expResult.times(-1.0));
-        assert(difference.getMeasure(Angle.MeasureRange.PlusMinus180) < 1e-6);
+        assert(difference.getMeasure(Angle.MeasureRange.PlusMinus) < 1e-6);
     }
 
     /**

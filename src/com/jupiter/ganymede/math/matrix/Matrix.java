@@ -401,7 +401,7 @@ public class Matrix {
                 int rowOfMax = rowBelowWithLargestValue(rrefValues, j, j);
                 if (rowOfMax < 0) {
                     this.inverse = null;
-                    this.rrefMatrix = null;
+                    this.rrefMatrix = new Matrix(rrefValues);
                     return;
                 }
                 if (rowOfMax != j) {
