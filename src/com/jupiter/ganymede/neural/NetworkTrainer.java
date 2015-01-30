@@ -10,7 +10,7 @@ package com.jupiter.ganymede.neural;
  * @author Nathan Templon
  * @param <T>
  */
-public interface NetworkTrainer<T extends NeuralNetwork> {
+public interface NetworkTrainer<T extends FeedForwardNetwork> {
     
     boolean train(T network, int maxAttempts);
     

@@ -9,30 +9,19 @@ package com.jupiter.ganymede.neural;
  *
  * @author Nathan Templon
  */
-public class ThresholdNeuron extends Neuron {
+public class SigmoidNeuron extends Neuron {
 
-    // Fields
-    private final double threshold;
-    
-    
-    // Initialization
-    public ThresholdNeuron(double threshold) {
-        this.threshold = threshold;
-    }
-    
-    
     // Public Methods
     @Override
     public double getFunctionValue(double totalInput) {
-        if (totalInput >= this.threshold) {
-            return 1.0;
-        }
-        return 0.0;
+        return 1.0 / (1.0 + Math.exp(-1.0 * totalInput));
     }
 
     @Override
     public double getFunctionDerivative(double totalInput) {
-        return 0.0;
+        double exp = Math.exp(-1.0 * totalInput);
+        double denTerm = 1.0 + exp;
+        return (-1.0 * exp) / (denTerm * denTerm);
     }
     
 }

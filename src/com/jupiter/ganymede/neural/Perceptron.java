@@ -9,7 +9,7 @@ package com.jupiter.ganymede.neural;
  *
  * @author nathan
  */
-public class Perceptron extends NeuralNetwork {
+public class Perceptron extends FeedForwardNetwork {
     
     // Initialization
     public Perceptron(double defaultWeight, NeuralNetworkInputLayer input, NeuralNetworkLayer output) {

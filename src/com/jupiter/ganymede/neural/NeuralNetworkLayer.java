@@ -6,10 +6,11 @@
 package com.jupiter.ganymede.neural;
 
 import com.jupiter.ganymede.math.vector.Vector;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  *
@@ -18,14 +19,14 @@ import java.util.Set;
 public class NeuralNetworkLayer {
     
     // Fields
-    private final Set<Neuron> neurons = new LinkedHashSet<>();
-    private final Set<Neuron> neuronsView = Collections.unmodifiableSet(this.neurons);
+    private final List<Neuron> neurons;
+    private final List<Neuron> neuronsView;
     
     private Vector valueVector;
     
     
     // Properties
-    public final Set<Neuron> getNeurons() {
+    public final List<Neuron> getNeurons() {
         return this.neuronsView;
     }
     
@@ -36,7 +37,8 @@ public class NeuralNetworkLayer {
     
     // Initialization
     public NeuralNetworkLayer(Neuron... neurons) {
-        this.neurons.addAll(Arrays.asList(neurons));
+        this.neurons = new ArrayList<>(new LinkedHashSet<>(Arrays.asList(neurons))); // Removes duplicates
+        this.neuronsView = Collections.unmodifiableList(this.neurons);
     }
     
     
