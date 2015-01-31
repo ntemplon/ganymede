@@ -108,7 +108,7 @@ public class Vector {
         if (other.getDimension() != this.getDimension()) {
             throw new IllegalArgumentException("The angle between two vectors is only defined for vectors of the same dimension!");
         }
-        
+
         return new Angle(this.dot(other) / (this.norm() * other.norm()), Angle.TrigFunction.COSINE);
     }
     

@@ -326,49 +326,51 @@ public class Angle {
      * Angle.TrigFunction enum)
      */
     public Angle(double funcVal, TrigFunction function) {
+        double inputFuncVal = funcVal;
+        
         // Correct for double precision errors
-        if (Double.doubleToLongBits(funcVal) == Double.doubleToLongBits(1.0)) {
-            funcVal = 1.0;
+        if (Double.doubleToLongBits(inputFuncVal) == Double.doubleToLongBits(1.0)) {
+            inputFuncVal = 1.0;
         }
-        else if (Double.doubleToLongBits(funcVal) == Double.doubleToLongBits(-1.0)) {
-            funcVal = -1.0;
+        else if (Double.doubleToLongBits(inputFuncVal) == Double.doubleToLongBits(-1.0)) {
+            inputFuncVal = -1.0;
         }
-        else if (Double.doubleToLongBits(funcVal) == Double.doubleToLongBits(0.0)) {
-            funcVal = 0.0;
+        else if (Double.doubleToLongBits(inputFuncVal) == Double.doubleToLongBits(0.0)) {
+            inputFuncVal = 0.0;
         }
 
         switch (function) {
 
             case COSECANT:
-                funcVal = 1.0 / funcVal;
-                this.measure = Math.asin(funcVal);
+                inputFuncVal = 1.0 / inputFuncVal;
+                this.measure = Math.asin(Math.max(-1.0, Math.min(1.0, inputFuncVal)));
                 break;
             case SINE:
-                this.measure = Math.asin(funcVal);
+                this.measure = Math.asin(Math.max(-1.0, Math.min(1.0, inputFuncVal)));
                 break;
 
             case SECANT:
-                funcVal = 1.0 / funcVal;
-                this.measure = Math.acos(funcVal);
+                inputFuncVal = 1.0 / inputFuncVal;
+                this.measure = Math.acos(Math.max(-1.0, Math.min(1.0, inputFuncVal)));
                 break;
             case COSINE:
-                this.measure = Math.acos(funcVal);
+                this.measure = Math.acos(Math.max(-1.0, Math.min(1.0, inputFuncVal)));
                 break;
 
             case COTANGENT:
-                if (funcVal == 0) {
+                if (inputFuncVal == 0) {
                     this.measure = Math.PI;
                     break;
                 }
-                funcVal = 1.0 / funcVal;
-                this.measure = Math.atan(funcVal);
+                inputFuncVal = 1.0 / inputFuncVal;
+                this.measure = Math.atan(inputFuncVal);
                 break;
             case TANGENT:
-                this.measure = Math.atan(funcVal);
+                this.measure = Math.atan(inputFuncVal);
                 break;
 
         }
-
+        
         correctValueRange();
     }
 
