@@ -26,11 +26,11 @@ public class NeuralNetworkLayer {
     
     
     // Properties
-    public final List<Neuron> getNeurons() {
+    public List<Neuron> getNeurons() {
         return this.neuronsView;
     }
     
-    public final Vector getValueVector() {
+    public Vector getValueVector() {
         return this.valueVector;
     }
     

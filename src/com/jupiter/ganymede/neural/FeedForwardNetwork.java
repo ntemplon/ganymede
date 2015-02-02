@@ -27,6 +27,9 @@ public class FeedForwardNetwork implements NeuralNetwork {
     private final List<NeuralNetworkLayer> layersAccess;
     private final double defaultWeight;
     
+    private final Neuron biasNeuron = new ConstantValueNeuron(1.0);
+    private Neuron[] neurons;
+    
     
     // Properties
     @Override
@@ -53,6 +56,19 @@ public class FeedForwardNetwork implements NeuralNetwork {
     public NeuralNetworkLayer getOutputLayer() {
         return this.outputLayer;
     }
+    
+    @Override
+    public int getNeuronCount() {
+        return this.neurons.length;
+    }
+    
+    @Override
+    public Neuron getNeuron(int id) {
+        if (id < 0 || id >= this.neurons.length) {
+            return null;
+        }
+        return this.neurons[id];
+    }
 
 
     // Initialization
@@ -73,6 +89,7 @@ public class FeedForwardNetwork implements NeuralNetwork {
         
         this.layersAccess = Collections.unmodifiableList(Arrays.asList(layers));
 
+        this.assignIDs();
         this.connectLayers();
     }
 
@@ -110,6 +127,33 @@ public class FeedForwardNetwork implements NeuralNetwork {
                     });
                 }
             });
+        }
+    }
+    
+    private void assignIDs() {
+        // Count the number of neurons available
+        int neuronCount = 1; // The 1 is for the bias Neuron
+        neuronCount += this.getInputLayer().getNeurons().size();
+        for (NeuralNetworkLayer layer : this.getLayers()) {
+            neuronCount += layer.getNeurons().size();
+        }
+        
+        this.neurons = new Neuron[neuronCount];
+        this.neurons[0] = this.biasNeuron;
+        
+        int currentID = 1;
+        for (Neuron neuron : this.getInputLayer().getNeurons()) {
+            neuron.id.set(currentID);
+            this.neurons[currentID] = neuron;
+            currentID++;
+        }
+        
+        for (NeuralNetworkLayer layer : this.getLayers()) {
+            for (Neuron neuron : layer.getNeurons()) {
+                neuron.id.set(currentID);
+                this.neurons[currentID] = neuron;
+                currentID++;
+            }
         }
     }
 

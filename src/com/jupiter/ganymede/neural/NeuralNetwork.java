@@ -15,6 +15,8 @@ import java.util.List;
 public interface NeuralNetwork {
     int getInputCount();
     int getOutputCount();
+    int getNeuronCount();
+    Neuron getNeuron(int id);
     
     List<? extends NeuralNetworkLayer> getLayers();
     NeuralNetworkInputLayer getInputLayer();

@@ -5,6 +5,7 @@
  */
 package com.jupiter.ganymede.neural;
 
+import com.jupiter.ganymede.property.Property;
 import java.util.Collections;
 import java.util.EventListener;
 import java.util.HashSet;
@@ -18,6 +19,8 @@ import java.util.Set;
 public abstract class Neuron {
     
     // Fields
+    public final Property<Integer> id = new Property<>();
+    
     private double sum;
     private double value;
     private double derivative;
@@ -108,7 +111,7 @@ public abstract class Neuron {
 
 
     // Inner Classes
-    public static final class Synapse {
+    public static class Synapse {
 
         // Fields
         private final Neuron source;

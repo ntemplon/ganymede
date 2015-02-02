@@ -8,7 +8,6 @@ package com.jupiter.ganymede.neural;
 import com.jupiter.ganymede.math.vector.Vector;
 import com.jupiter.ganymede.neural.Neuron.Synapse;
 import java.util.Random;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -21,8 +20,8 @@ public class BackPropagationTrainer<T extends FeedForwardNetwork> extends Manage
     public BackPropagationTrainer(double trainingRate) {
         super(trainingRate);
     }
-    
-    
+
+
     // Public Methods
     @Override
     public boolean train(FeedForwardNetwork network, int maxAttempts) {
@@ -35,8 +34,7 @@ public class BackPropagationTrainer<T extends FeedForwardNetwork> extends Manage
                 });
             });
         });
-        
-        
+
         // Standard Training
         int numAttempts = 0;
         boolean trained = false;
@@ -46,27 +44,56 @@ public class BackPropagationTrainer<T extends FeedForwardNetwork> extends Manage
         }
         return trained;
     }
-    
-    
+
+
     // Private Methods
     private boolean trainOnce(FeedForwardNetwork network) {
+        double[] deltas = new double[network.getNeuronCount()];
+        boolean weightsChanged = false;
+
         // Loop through all training pairs
-        this.getTrainingPairs().stream().forEach((TrainingPair pair) -> {
+        for(TrainingPair pair : this.getTrainingPairs()) {
             Vector result = network.evaluate(pair.input);
             Vector errorVector = pair.output.minus(result);
-            
-            // Loop through each component of the error and back propagate it.
+
+            // Calculate error for output neurons
             int i = 1;
             for (Neuron neuron : network.getOutputLayer().getNeurons()) {
                 double error = errorVector.getComponent(i);
-                
-                
+
+                deltas[neuron.id.get()] = error * neuron.getValueDerivative();
+
                 i++;
-                throw new NotImplementedException();
             }
-        });
-        
-        return true;
+
+            // Backpropagate error
+            for (int layerNumber = network.getLayers().size() - 2; layerNumber >= -1; layerNumber--) {
+                NeuralNetworkLayer layer;
+                if (layerNumber >= 0) {
+                    layer = network.getLayers().get(layerNumber);
+                }
+                else {
+                    layer = network.getInputLayer();
+                }
+
+                for(Neuron neuron : layer.getNeurons()) {
+                    double delta = 0;
+                    for (Synapse synapse : neuron.getAxonConnections()) {
+                        delta += synapse.getWeight() * deltas[synapse.getTarget().id.get()];
+                    }
+                    deltas[neuron.id.get()] = delta;
+
+                    if (delta != 0.0) {
+                        for (Synapse synapse : neuron.getAxonConnections()) {
+                            synapse.setWeight(synapse.getWeight() - this.getTrainingRate() * delta * synapse.getTarget().getValue());
+                        }
+                        weightsChanged = true;
+                    }
+                }
+            }
+        }
+
+        return weightsChanged;
     }
 
 }

@@ -6,47 +6,37 @@
 package com.jupiter.ganymede.neural;
 
 import com.jupiter.ganymede.math.vector.Vector;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  *
  * @author Nathan Templon
  */
-public class NeuralNetworkInputLayer {
+public class NeuralNetworkInputLayer extends NeuralNetworkLayer {
     
-    // Fields
-    private final InputNeuron[] inputNeurons;
-    private final Set<Neuron> neurons = new LinkedHashSet<>();
-    private final Set<Neuron> neuronView = Collections.unmodifiableSet(this.neurons);
-    
-    
-    // Properties
-    public Set<Neuron> getNeurons() {
-        return this.neuronView;
+    // Static Methods
+    private static InputNeuron[] getInputNeurons(int dimension) {
+        InputNeuron[] neurons = new InputNeuron[dimension];
+        for(int i = 0; i < neurons.length; i++) {
+            neurons[i] = new InputNeuron();
+        }
+        return neurons;
     }
     
     
     // Initialization
     public NeuralNetworkInputLayer(int dimension) {
-        this.inputNeurons = new InputNeuron[dimension];
-        
-        for (int i = 0; i < dimension; i++) {
-            this.inputNeurons[i] = new InputNeuron();
-            this.neurons.add(this.inputNeurons[i]);
-        }
+        super(getInputNeurons(dimension));
     }
     
     
     // Public Methods
     public void setValues(Vector input) {
-        if (input.getDimension() != this.inputNeurons.length) {
+        if (input.getDimension() != this.getNeurons().size()) {
             throw new IllegalArgumentException("Input vectors must match the number of required inputs!");
         }
         
         for(int i = 0; i < input.getDimension(); i++) {
-            this.inputNeurons[i].setValue(input.getComponent(i + 1));
+            this.getNeurons().get(i).setValue(input.getComponent(i + 1));
         }
     }
     
