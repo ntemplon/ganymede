@@ -5,9 +5,9 @@
  */
 package com.jupiter.ganymede.neural;
 
+import com.jupiter.ganymede.event.Event;
 import com.jupiter.ganymede.property.Property;
 import java.util.Collections;
-import java.util.EventListener;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -114,14 +114,14 @@ public abstract class Neuron {
     public static class Synapse {
 
         // Fields
+        public final Event<WeightChangedArgs> weightChanged = new Event<>();
+        
         private final Neuron source;
         private final Neuron target;
         private double weight;
 
         private double unweightedValue;
         private double value;
-        
-        private final Set<WeightChangeListener> listeners = new LinkedHashSet<>();
 
 
         // Properties
@@ -160,24 +160,8 @@ public abstract class Neuron {
             this.target = target;
             this.weight = weight;
         }
-        
-        
-        // Public Methods
-        public boolean addWeightChangeListener(WeightChangeListener listener) {
-            if (listener == null) {
-            return false;
-        }
-            return this.listeners.add(listener);
-        }
-        
-        public boolean removeWeightChangeListener(WeightChangeListener listener) {
-            if (listener == null) {
-            return false;
-        }
-            return this.listeners.remove(listener);
-        }
 
-
+        
         // Private Methods
         private void connect() {
             this.source.addValueChangeListener((double oldValue, double newValue) -> {
@@ -189,14 +173,26 @@ public abstract class Neuron {
         }
         
         private void updateWeightChanged(double oldWeight, double newWeight) {
-            this.listeners.stream().forEach((WeightChangeListener listener) -> listener.weightChanged(oldWeight, newWeight));
+            this.weightChanged.dispatch(new WeightChangedArgs(this, oldWeight, newWeight));
         }
         
         
-        // Inner Interfaces
-        @FunctionalInterface
-        public static interface WeightChangeListener extends EventListener {
-            public void weightChanged(double oldWeight, double newWeight);
+        // Nested Classes
+        public static class WeightChangedArgs {
+            
+            // Fields
+            public final Synapse sender;
+            public final double oldWeight;
+            public final double newWeight;
+            
+            
+            // Initialization
+            public WeightChangedArgs(Synapse sender, double oldWeight, double newWeight) {
+                this.sender = sender;
+                this.oldWeight = oldWeight;
+                this.newWeight = newWeight;
+            }
+            
         }
 
     }

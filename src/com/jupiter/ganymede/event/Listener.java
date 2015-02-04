@@ -5,13 +5,15 @@
  */
 package com.jupiter.ganymede.event;
 
+import java.util.EventListener;
+
 /**
  *
  * @author Nathan Templon
  * @param <T>
  */
 @FunctionalInterface
-public interface Listener<T> {
+public interface Listener<T> extends EventListener {
     
     void handle(T value);
     
