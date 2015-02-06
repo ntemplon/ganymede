@@ -39,13 +39,13 @@ public class PropertyBinding<T> implements Listener<PropertyChangedArgs<T>> {
     protected final void bind(Property<T> property) {
         this.property.set(this.binding.evaluate());
         for (Property dependency : this.dependencies) {
-            dependency.changed.addListener(this);
+            dependency.addPropertyChangedListener(this);
         }
     }
     
     protected final void unbind() {
         for (Property dependency : this.dependencies) {
-            dependency.changed.removeListener(this);
+            dependency.removePropertyChangedListener(this);
         }
     }
     

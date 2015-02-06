@@ -6,10 +6,10 @@
 package com.jupiter.ganymede.neural;
 
 import com.jupiter.ganymede.event.Event;
+import com.jupiter.ganymede.event.Listener;
 import com.jupiter.ganymede.property.Property;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -21,6 +21,8 @@ public abstract class Neuron {
     // Fields
     public final Property<Integer> id = new Property<>();
     
+    private final Event<ValueChangedArgs> valueChanged = new Event<>();
+    
     private double sum;
     private double value;
     private double derivative;
@@ -28,8 +30,6 @@ public abstract class Neuron {
     private final Set<Synapse> dendriteViewer = Collections.unmodifiableSet(this.dendrites);
     private final Set<Synapse> axonConnections = new HashSet<>();
     private final Set<Synapse> axonViewer = Collections.unmodifiableSet(this.axonConnections);
-    
-    private final Set<ValueChangeListener> listeners = new LinkedHashSet<>();
     
 
     // Properties
@@ -40,7 +40,8 @@ public abstract class Neuron {
     protected void setValue(double value) {
         double old = this.value;
         this.value = value;
-        this.listeners.stream().forEach((ValueChangeListener listener) -> listener.valueChanged(old, value));
+        
+        this.valueChanged.dispatch(new ValueChangedArgs(this, old, this.value));
     }
 
     public double getValueDerivative() {
@@ -88,29 +89,33 @@ public abstract class Neuron {
         return synapse;
     }
     
-    public final boolean addValueChangeListener(ValueChangeListener listener) {
-        if (listener == null) {
-            return false;
-        }
-        return this.listeners.add(listener);
+    public boolean addValueChangedListener(Listener<ValueChangedArgs> listener) {
+        return this.valueChanged.addListener(listener);
     }
     
-    public final boolean removeValueChangeListener(ValueChangeListener listener) {
-        if (listener == null) {
-            return false;
-        }
-        return this.listeners.remove(listener);
-    }
-    
-    
-    // Inner Interfaces
-    @FunctionalInterface
-    public static interface ValueChangeListener {
-        void valueChanged(double oldValue, double newValue);
+    public boolean removeValueChangedListener(Listener<ValueChangedArgs> listener) {
+        return this.valueChanged.removeListener(listener);
     }
 
 
     // Inner Classes
+    public static class ValueChangedArgs {
+        
+        // Fields
+        public final double oldValue;
+        public final double newValue;
+        public final Neuron sender;
+        
+        
+        // Initialization
+        public ValueChangedArgs(Neuron sender, double oldValue, double newValue) {
+            this.sender = sender;
+            this.oldValue = oldValue;
+            this.newValue = newValue;
+        }
+        
+    }
+    
     public static class Synapse {
 
         // Fields
@@ -164,9 +169,9 @@ public abstract class Neuron {
         
         // Private Methods
         private void connect() {
-            this.source.addValueChangeListener((double oldValue, double newValue) -> {
-                Synapse.this.unweightedValue = newValue;
-                Synapse.this.value = newValue * Synapse.this.getWeight();
+            this.source.addValueChangedListener((ValueChangedArgs args) -> {
+                Synapse.this.unweightedValue = args.newValue;
+                Synapse.this.value = args.newValue * Synapse.this.getWeight();
             });
             this.source.addAxonConnection(this);
             this.target.addDendriteConnection(this);

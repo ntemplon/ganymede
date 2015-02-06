@@ -6,6 +6,7 @@
 package com.jupiter.ganymede.property;
 
 import com.jupiter.ganymede.event.Event;
+import com.jupiter.ganymede.event.Listener;
 
 /**
  *
@@ -15,7 +16,7 @@ import com.jupiter.ganymede.event.Event;
 public class Property<T> {
 
     // Events
-    public final Event<PropertyChangedArgs<T>> changed = new Event<>();
+    private final Event<PropertyChangedArgs<T>> changed = new Event<>();
     
     
     // Fields
@@ -63,6 +64,14 @@ public class Property<T> {
         if ((oldValue == null && value == null) || (oldValue != null && !oldValue.equals(this.value))) {
             this.changed.dispatch(new PropertyChangedArgs<>(this, oldValue, this.value));
         }
+    }
+    
+    public boolean addPropertyChangedListener(Listener<PropertyChangedArgs<T>> listener) {
+        return this.changed.addListener(listener);
+    }
+    
+    public boolean removePropertyChangedListener(Listener<PropertyChangedArgs<T>> listener) {
+        return this.changed.removeListener(listener);
     }
 
     /**
