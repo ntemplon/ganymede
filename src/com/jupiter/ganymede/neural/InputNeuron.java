@@ -10,32 +10,10 @@ package com.jupiter.ganymede.neural;
  * @author Nathan Templon
  */
 public class InputNeuron extends Neuron {
-
+    
     // Initialization
     public InputNeuron() {
-
-    }
-
-
-    // Public Methods
-    @Override
-    public void evaluate() {
-        
+        super((double sum) -> sum, (double sum) -> 0);
     }
     
-    @Override
-    public void addDendriteConnection(Synapse axon) {
-        
-    }
-    
-    @Override
-    public double getFunctionValue(double sum) {
-        return sum;
-    }
-    
-    @Override
-    public double getFunctionDerivative(double sum) {
-        return 0.0;
-    }
-
 }
