@@ -5,9 +5,11 @@
  */
 package com.jupiter.ganymede.neural;
 
+import com.jupiter.ganymede.neural.training.TestResults;
 import com.jupiter.ganymede.math.vector.Vector;
-import com.jupiter.ganymede.neural.TestResults.TrainingPairResult;
-import com.jupiter.ganymede.neural.training.ManagedTrainer.TrainingPair;
+import com.jupiter.ganymede.neural.training.DataSet;
+import com.jupiter.ganymede.neural.training.TestResults.TrainingPairResult;
+import com.jupiter.ganymede.neural.training.TrainingPair;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,7 +43,7 @@ public class FeedForwardNetwork implements NeuralNetwork {
 
     private final double[] sums;
     private final double[] activatedValues;
-    
+
     private final List<LayerInfo> layerInfoAccess;
     private final List<Neuron> neuronAccess;
 
@@ -71,7 +73,7 @@ public class FeedForwardNetwork implements NeuralNetwork {
     public final List<LayerInfo> getLayerInfo() {
         return this.layerInfoAccess;
     }
-    
+
     @Override
     public final List<Neuron> getNeurons() {
         return this.neuronAccess;
@@ -81,17 +83,17 @@ public class FeedForwardNetwork implements NeuralNetwork {
     public final double getSum(int neuron) {
         return this.sums[neuron];
     }
-    
+
     @Override
     public final double getActivatedValue(int neuron) {
         return this.activatedValues[neuron];
     }
-    
+
     @Override
     public final double getWeight(int targetNeuron, int sourceNeuron) {
         return this.weights[targetNeuron][sourceNeuron];
     }
-    
+
     @Override
     public final void setWeight(int targetNeuron, int sourceNeuron, double weight) {
         this.weights[targetNeuron][sourceNeuron] = weight;
@@ -154,7 +156,7 @@ public class FeedForwardNetwork implements NeuralNetwork {
         // Create sums and weights
         this.sums = new double[this.getNeuronCount()];
         this.activatedValues = new double[this.getNeuronCount()];
-        
+
         // Create Read-Only Collections
         this.layerInfoAccess = Collections.unmodifiableList(Arrays.asList(this.layerInfo));
         this.neuronAccess = Collections.unmodifiableList(Arrays.asList(this.neurons));
@@ -200,13 +202,13 @@ public class FeedForwardNetwork implements NeuralNetwork {
 
         return new Vector(result);
     }
-    
-    public TestResults test(TrainingPair[] pairs) {
+
+    public TestResults test(DataSet set) {
         Set<TrainingPairResult> results = new HashSet<>();
-        for(TrainingPair pair : pairs) {
+        set.getTrainingPairs().stream().forEach((pair) -> {
             results.add(new TrainingPairResult(pair, this.evaluate(pair.input)));
-        }
-        return new TestResults(results.toArray(new TrainingPairResult[pairs.length]));
+        });
+        return new TestResults(results.toArray(new TrainingPairResult[set.getTrainingPairs().size()]));
     }
 
 

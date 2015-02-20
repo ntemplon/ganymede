@@ -5,12 +5,7 @@
  */
 package com.jupiter.ganymede.neural.training;
 
-import com.jupiter.ganymede.math.vector.Vector;
 import com.jupiter.ganymede.neural.FeedForwardNetwork;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -20,37 +15,26 @@ import java.util.Set;
 public abstract class ManagedTrainer<T extends FeedForwardNetwork> implements NetworkTrainer<T> {
     
     // Fields
-    private final Set<TrainingPair> trainingPairs = new HashSet<>();
-    private final Set<TrainingPair> trainingPairsAccess = Collections.unmodifiableSet(this.trainingPairs);
+    private DataSet trainingSet;
     
     
     // Properties
-    public final Set<TrainingPair> getTrainingPairs() {
-        return this.trainingPairsAccess;
+    public final DataSet getTrainingSet() {
+        return this.trainingSet;
+    }
+    
+    public final void setTrainingSet(DataSet trainingSet) {
+        this.trainingSet = trainingSet;
+    }
+    
+    
+    // Initialization
+    public ManagedTrainer() {
+        this.trainingSet = new DataSet();
     }
     
     
     // Public Methods
-    public final boolean addTrainingPair(TrainingPair pair) {
-        return this.trainingPairs.add(pair);
-    }
-    
-    public final boolean removeTrainingPair(TrainingPair pair) {
-        return this.trainingPairs.remove(pair);
-    }
-    
-    public final void addTrainingPairs(TrainingPair[] pairs) {
-        for (TrainingPair pair : pairs) {
-            this.addTrainingPair(pair);
-        }
-    }
-    
-    public final void addTrainingPairs(Collection<TrainingPair> pairs) {
-        pairs.stream().forEach((TrainingPair pair) -> {
-            this.addTrainingPair(pair);
-        });
-    }
-    
     @Override
     public void train(T network, ExitCriteria<T> criteria) {
         int epoch = 0;
@@ -60,23 +44,6 @@ public abstract class ManagedTrainer<T extends FeedForwardNetwork> implements Ne
             results = this.trainEpoch(network, epoch);
         }
         while (!criteria.shouldExit(results, epoch));
-    }
-    
-    
-    // Nested Classes
-    public static class TrainingPair {
-        
-        // Fields
-        public final Vector input;
-        public final Vector target;
-        
-        
-        // Initialization
-        public TrainingPair(Vector input, Vector output) {
-            this.input = input;
-            this.target = output;
-        }
-        
     }
     
 }
