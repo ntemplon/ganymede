@@ -41,7 +41,7 @@ public class BackPropagationTrainer<T extends FeedForwardNetwork> extends Manage
     public TrainingResults trainEpoch(T network, int epoch) {
         boolean weightsChanged = true;
 
-        this.getTrainingPairs().stream().forEach((TrainingPair pair) -> {
+        this.getTrainingSet().getTrainingPairs().stream().forEach((TrainingPair pair) -> {
             try {
                 Vector output = network.evaluate(pair.input);
                 Vector error = pair.target.minus(output);

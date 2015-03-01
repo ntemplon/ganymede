@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jupiter.ganymede.neural;
+package com.jupiter.ganymede.neural.training;
 
 import com.jupiter.ganymede.math.vector.Vector;
-import com.jupiter.ganymede.neural.training.ManagedTrainer.TrainingPair;
+import com.jupiter.ganymede.neural.training.TrainingPair;
 import java.util.Arrays;
 
 /**
