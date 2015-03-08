@@ -147,7 +147,7 @@ public class SingleVariableTableFunction implements SingleVariableRealFunction {
 
     // Public Members
     @Override
-    public Double evaluate(Double value) {
+    public Double apply(Double value) {
 
         // If there are no points, return 0
         if (this.points.isEmpty()) {

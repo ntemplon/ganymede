@@ -5,6 +5,7 @@
  */
 package com.jupiter.ganymede.math.regression;
 
+import com.jupiter.ganymede.math.function.LinearFunction;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -52,7 +53,7 @@ public class LinearRegressor implements Regressor<Double, Double> {
         final double slope = correlation * (secondStdDev / firstStdDev);
         final double yIntercept = secondMean - slope * firstMean;
         
-        return (Function<Double, Double>) (Double value) -> yIntercept + value * slope;
+        return new LinearFunction(slope, yIntercept);
     }
 
 }

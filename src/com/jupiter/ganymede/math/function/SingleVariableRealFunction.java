@@ -5,6 +5,8 @@
  */
 package com.jupiter.ganymede.math.function;
 
+import java.util.function.Function;
+
 /**
  *
  * @author Nathan Templon
