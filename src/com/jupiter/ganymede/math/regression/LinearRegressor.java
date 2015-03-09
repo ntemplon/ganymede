@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class LinearRegressor implements Regressor<Double, Double> {
 
     @Override
-    public Function bestFit(Set<Point<? extends Double, ? extends Double>> points) {
+    public Function bestFit(Set<Point<Double, Double>> points) {
         final double firstMean = points.stream()
                 .mapToDouble((Point<? extends Double, ? extends Double> point) -> point.first)
                 .average()

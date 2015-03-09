@@ -17,7 +17,7 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface Regressor<T extends Number, F extends Number> {
     
-    Function<T, F> bestFit(Set<Point<? extends T, ? extends F>> points);
+    Function<T, F> bestFit(Set<Point<T, F>> points);
     
     
     // Nested Classes
