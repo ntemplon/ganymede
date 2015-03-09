@@ -386,6 +386,10 @@ public class Angle {
     public Angle plus(Angle other) {
         return new Angle(this.getMeasure() + other.getMeasure());
     }
+    
+    public Angle minus(Angle other) {
+        return this.plus(other.times(-1.0));
+    }
 
     /**
      * A method that multiplies the Angle object by a scalar multiplier

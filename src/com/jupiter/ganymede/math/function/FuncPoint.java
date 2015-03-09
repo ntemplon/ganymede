@@ -47,4 +47,26 @@ public class FuncPoint implements Comparable {
         FuncPoint other = (FuncPoint) o;
         return Double.compare(this.x, other.x);
     }
+    
+    @Override
+    public String toString() {
+        return "[" + this.x + ", " + this.y + "]";
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof FuncPoint) {
+            FuncPoint other = (FuncPoint) o;
+            return other.x == this.x && other.y == this.y;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
+        return hash;
+    }
 }
