@@ -63,11 +63,14 @@ public class Angle {
 
         /**
          * Between 0 and 2 PI (360 degrees)
-         *//**
+         */
+        /**
          * Between 0 and 2 PI (360 degrees)
-         *//**
+         */
+        /**
          * Between 0 and 2 PI (360 degrees)
-         *//**
+         */
+        /**
          * Between 0 and 2 PI (360 degrees)
          */
         FullCircle,
@@ -98,7 +101,8 @@ public class Angle {
      * system, between 0 and 2 PI (360 deg).
      *
      * @param type the AngleType (RADIANS or DEGREES) that the user wants the
-     * angle reported in
+     *             angle reported in
+     *
      * @return Returns the angle measure in radians or degrees, as specified.
      */
     public double getMeasure(AngleType type) {
@@ -123,8 +127,9 @@ public class Angle {
      * radians.
      *
      * @param range The range to return the measure of the angle in
+     *
      * @return Returns the measure of the angle in the specified range, in
-     * radians.
+     *         radians.
      */
     public double getMeasure(MeasureRange range) {
         switch (range) {
@@ -148,8 +153,9 @@ public class Angle {
      * A method that returns the measure of the angle in the specified range and
      * units
      *
-     * @param type The type of Angle measurement
+     * @param type  The type of Angle measurement
      * @param range The range to measure the angle in
+     *
      * @return Returns the measure of the angle in the specified range and units
      */
     public double getMeasure(AngleType type, MeasureRange range) {
@@ -298,9 +304,9 @@ public class Angle {
      * system in which it was measured.
      *
      * @param value the measure of the angle to be created, in the measurement
-     * system specified
-     * @param type the angle measurement system to be used, either
-     * AngleType.RADIANS or AngleType.DEGREES
+     *              system specified
+     * @param type  the angle measurement system to be used, either
+     *              AngleType.RADIANS or AngleType.DEGREES
      */
     public Angle(double value, AngleType type) {
         switch (type) {
@@ -320,14 +326,14 @@ public class Angle {
      * A constructor that allows the user to specify an angle by the value of
      * one of its trigonometric functions
      *
-     * @param funcVal the value of the specified trigonometric function for the
-     * angle
+     * @param funcVal  the value of the specified trigonometric function for the
+     *                 angle
      * @param function the trigonometric function whose value is given (from the
-     * Angle.TrigFunction enum)
+     *                 Angle.TrigFunction enum)
      */
     public Angle(double funcVal, TrigFunction function) {
         double inputFuncVal = funcVal;
-        
+
         // Correct for double precision errors
         if (Double.doubleToLongBits(inputFuncVal) == Double.doubleToLongBits(1.0)) {
             inputFuncVal = 1.0;
@@ -370,23 +376,24 @@ public class Angle {
                 break;
 
         }
-        
+
         correctValueRange();
     }
 
-    
+
     // Public Methods
     /**
      * A method that facilitates the addition of two Angle objects.
      *
      * @param other the angle to be added to this one.
+     *
      * @return Returns a new Angle object, equal in size to the sum of the two
-     * angles.
+     *         angles.
      */
     public Angle plus(Angle other) {
         return new Angle(this.getMeasure() + other.getMeasure());
     }
-    
+
     public Angle minus(Angle other) {
         return this.plus(other.times(-1.0));
     }
@@ -395,8 +402,9 @@ public class Angle {
      * A method that multiplies the Angle object by a scalar multiplier
      *
      * @param scalar the scalar to multiply the angle by
+     *
      * @return Returns an angle that is the result of multiplying this angle by
-     * a given scalar.
+     *         a given scalar.
      */
     public Angle times(double scalar) {
         return new Angle(this.getMeasure() * scalar);
@@ -406,6 +414,7 @@ public class Angle {
      * A method that tests this angle for equality against another Angle object.
      *
      * @param other the Angle to be compared to this one for equality.
+     *
      * @return Returns a boolean indicating if the two angles are equal.
      */
     @Override
@@ -438,24 +447,34 @@ public class Angle {
         return this.getMeasure(AngleType.RADIANS) + " radians (" + this.getMeasure(AngleType.DEGREES) + " degrees)";
     }
 
-    
+
     // Private Methods
     /**
      * Changes the angles measure to be between 0 and 2 PI, inclusive.
      */
     private void correctValueRange() {
-//        while (measure < 0.0) {
-//            measure += (2 * Math.PI);
+//        final double twoPI = 2.0 * Math.PI;
+//        if (this.measure > twoPI) {
+//            int revsAbove = (int) Math.floor((this.measure - twoPI) / twoPI);
+//            this.measure -= revsAbove * twoPI;
 //        }
-//        while (measure > (2.0 * Math.PI)) {
-//            measure -= (2.0 * Math.PI);
+//        if (this.measure < twoPI) {
+//            int revsBelow = (int) Math.ceil((this.measure + twoPI) / twoPI);
+//            this.measure += revsBelow * twoPI;
 //        }
-//
-//        // Correct 2 PI to 0
+
+        while (measure < 0.0) {
+            measure += (2 * Math.PI);
+        }
+        while (measure > (2.0 * Math.PI)) {
+            measure -= (2.0 * Math.PI);
+        }
+
+        // Correct 2 PI to 0
 //        if (doubleEquals(measure, 2.0 * Math.PI)) {
 //            measure = 0.0;
 //        }
-        double frac2Pi = this.measure / (2 * Math.PI);
-        this.measure -= ((int) frac2Pi) * (2 * Math.PI);
+//        double frac2Pi = this.measure / (2 * Math.PI);
+//        this.measure -= ((int) Math.floor(frac2Pi)) * (2 * Math.PI);
     }
 }
