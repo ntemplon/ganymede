@@ -53,6 +53,10 @@ public class LinearRegressor implements Regressor<Double, Double> {
         final double slope = correlation * (secondStdDev / firstStdDev);
         final double yIntercept = secondMean - slope * firstMean;
         
+        if (Double.isNaN(slope) || Double.isNaN(yIntercept)) {
+            System.out.println("NaN in Regressor");
+        }
+        
         return new LinearFunction(slope, yIntercept);
     }
 
