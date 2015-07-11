@@ -6,24 +6,24 @@ import java.util.*
 /**
  * Created by nathan on 7/10/15.
  */
-public class CohonenMap(private val distance: (Vector, Vector) -> Double, exemplars: Collection<Vector>) : SelfOrganizingMap<CohonenMap.CohonenExemplar> {
+public class KohonenMap(private val distance: (Vector, Vector) -> Double, exemplars: Collection<Vector>) : SelfOrganizingMap<KohonenMap.KohonenExemplar> {
 
     // Properties
     override val dimension: Int
-    override val exemplars: List<CohonenExemplar>
+    override val exemplars: List<KohonenExemplar>
 
 
     // Initialization
     init {
         this.dimension = commonDimension(exemplars)
         this.exemplars = exemplars.toList().withIndex().map { vector ->
-            CohonenExemplar(vector.value, vector.index)
+            KohonenExemplar(vector.value, vector.index)
         }.toList()
     }
 
 
     // Public Methods
-    override fun categorize(vector: Vector): CohonenExemplar {
+    override fun categorize(vector: Vector): KohonenExemplar {
         return this.exemplars.map { exemplar ->
             DistancedExemplar(exemplar, this.distance.invoke(exemplar.vector, vector))
         }.reduce { first: DistancedExemplar, second: DistancedExemplar ->
@@ -62,7 +62,7 @@ public class CohonenMap(private val distance: (Vector, Vector) -> Double, exempl
 
 
     // Inner Classes
-    public data class CohonenExemplar(vector: Vector, public val coordinate: Int) : Exemplar {
+    public data class KohonenExemplar(vector: Vector, public val coordinate: Int) : Exemplar {
         // Properties
         override var vector: Vector = vector
             internal set
@@ -74,7 +74,7 @@ public class CohonenMap(private val distance: (Vector, Vector) -> Double, exempl
     }
 
 
-    public inner class CohonenTrainer(public val learningRate: (Int) -> Double, public val trainingVectors: Collection<Vector>) {
+    public inner class KohonenTrainer(public val learningRate: (Int) -> Double, public val trainingVectors: Collection<Vector>) {
         // Properties
         public var epochsTrained: Int = 0
             private set
@@ -105,8 +105,8 @@ public class CohonenMap(private val distance: (Vector, Vector) -> Double, exempl
         }
 
         private fun trainVector(vector: Vector, learningRate: Double) {
-            val closest = this@CohonenMap.categorize(vector)
-            for (exemplar in this@CohonenMap.exemplars) {
+            val closest = this@KohonenMap.categorize(vector)
+            for (exemplar in this@KohonenMap.exemplars) {
                 if (exemplar === closest) {
                     exemplar.vector = exemplar.vector * (1 - learningRate) + vector * learningRate
                 } else {
@@ -117,5 +117,5 @@ public class CohonenMap(private val distance: (Vector, Vector) -> Double, exempl
     }
 
 
-    private data class DistancedExemplar(public val exemplar: CohonenExemplar, public val distance: Double)
+    private data class DistancedExemplar(public val exemplar: KohonenExemplar, public val distance: Double)
 }

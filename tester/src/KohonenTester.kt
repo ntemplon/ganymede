@@ -1,5 +1,5 @@
 import com.jupiter.ganymede.math.vector.Vector
-import com.jupiter.ganymede.neural.CohonenMap
+import com.jupiter.ganymede.neural.KohonenMap
 
 /**
  * Created by nathan on 7/11/15.
@@ -7,7 +7,7 @@ import com.jupiter.ganymede.neural.CohonenMap
  */
 
 fun main(args: Array<String>) {
-    val map = CohonenMap(
+    val map = KohonenMap(
             { first, second ->
                 var sum = 0.0
 
