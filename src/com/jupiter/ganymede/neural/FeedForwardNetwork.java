@@ -7,9 +7,9 @@ package com.jupiter.ganymede.neural;
 
 import com.jupiter.ganymede.neural.training.TestResults;
 import com.jupiter.ganymede.math.vector.Vector;
-import com.jupiter.ganymede.neural.training.DataSet;
 import com.jupiter.ganymede.neural.training.TestResults.TrainingPairResult;
-import com.jupiter.ganymede.neural.training.TrainingPair;
+import com.jupiter.ganymede.neural.training.DataSet;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,7 +18,6 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- *
  * @author Nathan Templon
  */
 public class FeedForwardNetwork implements NeuralNetwork {
@@ -47,8 +46,8 @@ public class FeedForwardNetwork implements NeuralNetwork {
     private final List<LayerInfo> layerInfoAccess;
     private final List<Neuron> neuronAccess;
 
-
     // Properties
+
     /**
      * Neuron count, including bias neuron
      *
@@ -225,7 +224,5 @@ public class FeedForwardNetwork implements NeuralNetwork {
             this.mean = mean;
             this.standardDeviation = standardDeviation;
         }
-
     }
-
 }

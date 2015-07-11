@@ -8,13 +8,11 @@ package com.jupiter.ganymede.math.matrix;
 import com.jupiter.ganymede.math.geometry.Angle;
 import com.jupiter.ganymede.math.geometry.Angle.AngleType;
 import com.jupiter.ganymede.math.vector.Vector;
-import java.awt.Dimension;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
+
+import java.awt.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -214,7 +212,7 @@ public class MatrixTest {
                 {0, 1, 0},
                 {0, 0, 1}}
         );
-        Matrix result = Matrix.identity(dimension);
+        Matrix result = Matrix.Companion.identity(dimension);
         assertEquals(expResult, result);
     }
 
@@ -231,7 +229,7 @@ public class MatrixTest {
             {0.0, Math.sqrt(3.0) / 2.0, -0.5},
             {0.0, 0.5, Math.sqrt(3.0) / 2.0}
         });
-        Matrix result1 = Matrix.euler3(angle, 1);
+        Matrix result1 = Matrix.Companion.euler3(angle, 1);
         assertMatrixEquals(expResult1, result1);
         
         Matrix expResult2 = new Matrix(new double[][] {
@@ -239,7 +237,7 @@ public class MatrixTest {
             {0.0, 1.0, 0.0},
             {-0.5, 0.0, Math.sqrt(3.0) / 2.0}
         });
-        Matrix result2 = Matrix.euler3(angle, 2);
+        Matrix result2 = Matrix.Companion.euler3(angle, 2);
         assertMatrixEquals(expResult2, result2);
         
         Matrix expResult3 = new Matrix(new double[][] {
@@ -247,7 +245,7 @@ public class MatrixTest {
             {0.5, Math.sqrt(3.0) / 2.0, 0.0},
             {0.0, 0.0, 1.0}
         });
-        Matrix result3 = Matrix.euler3(angle, 3);
+        Matrix result3 = Matrix.Companion.euler3(angle, 3);
         assertMatrixEquals(expResult3, result3);
     }
     

@@ -27,7 +27,7 @@ public interface NeuralNetwork {
     
     
     // Nested Classes
-    public static class LayerInfo {
+    class LayerInfo {
 
         // Fields
         public final int layer;

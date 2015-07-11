@@ -35,7 +35,7 @@ public class Neuron {
     
     // Nested Interfaces
     @FunctionalInterface
-    public static interface NeuralFunction {
+    public interface NeuralFunction {
         double evaluate(double sum);
     }
     

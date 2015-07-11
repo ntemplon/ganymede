@@ -3,15 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jupiter.ganymede.math.function;
+package com.jupiter.ganymede.event
 
-import java.util.function.Function;
+import java.util.EventListener
 
 /**
- *
+
  * @author Nathan Templon
+ * *
+ * @param
  */
-@FunctionalInterface
-public interface SingleVariableRealFunction extends Function<Double, Double> {
-    
+FunctionalInterface
+public interface Listener<T> : EventListener {
+
+    public fun handle(value: T)
+
 }

@@ -6,7 +6,6 @@
 package com.jupiter.ganymede.neural.training;
 
 import com.jupiter.ganymede.math.vector.Vector;
-import com.jupiter.ganymede.neural.training.TrainingPair;
 import java.util.Arrays;
 
 /**
