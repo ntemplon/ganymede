@@ -61,7 +61,7 @@ public class CohonenMap(private val distance: (Vector, Vector) -> Double, exempl
 
 
     // Inner Classes
-    public inner class CohonenExemplar(vector: Vector, public val coordinate: Int) : Exemplar {
+    public inner data class CohonenExemplar(vector: Vector, public val coordinate: Int) : Exemplar {
         // Properties
         override var vector: Vector = vector
             private set

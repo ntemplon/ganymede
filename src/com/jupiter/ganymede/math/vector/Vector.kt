@@ -29,6 +29,10 @@ public open class Vector(vararg values: Double) {
         return this.values[component - 1]
     }
 
+    public fun get(component: Int): Double {
+        return this.getComponent(component)
+    }
+
     public open fun getUnitVector(): Vector {
         return this.times(1.0 / this.norm())
     }
