@@ -1,6 +1,7 @@
 package com.jupiter.ganymede.neural
 
 import com.jupiter.ganymede.math.vector.Vector
+import java.util.*
 
 /**
  * Created by nathan on 7/10/15.
@@ -61,11 +62,60 @@ public class CohonenMap(private val distance: (Vector, Vector) -> Double, exempl
 
 
     // Inner Classes
-    public inner data class CohonenExemplar(vector: Vector, public val coordinate: Int) : Exemplar {
+    public data class CohonenExemplar(vector: Vector, public val coordinate: Int) : Exemplar {
         // Properties
         override var vector: Vector = vector
-            private set
+            internal set
+
+        // Public Methods
+        override fun toString(): String {
+            return "CohonenExemplar(vector=" + this.vector.toString() + ", coordinate=" + this.coordinate.toString() + ")"
+        }
     }
 
-    private class DistancedExemplar(public val exemplar: CohonenExemplar, public val distance: Double)
+
+    public inner class CohonenTrainer(public val learningRate: (Int) -> Double, public val trainingVectors: Collection<Vector>) {
+        // Properties
+        public var epochsTrained: Int = 0
+            private set
+
+
+        // Initialization
+        public constructor(learningRate: Double, trainingVectors: Collection<Vector>) : this({ epoch -> learningRate }, trainingVectors)
+
+
+        // Public Methods
+        public fun train(epochs: Int) {
+            for (i in 1..epochs) {
+                this.trainEpoch()
+            }
+        }
+
+
+        // Private Methods
+        private fun trainEpoch() {
+            this.epochsTrained++
+            val learnRate = this.learningRate(this.epochsTrained)
+
+            val trainingOrder = this.trainingVectors.toArrayList()
+            Collections.shuffle(trainingOrder)
+            for (vector in trainingOrder) {
+                this.trainVector(vector, learnRate)
+            }
+        }
+
+        private fun trainVector(vector: Vector, learningRate: Double) {
+            val closest = this@CohonenMap.categorize(vector)
+            for (exemplar in this@CohonenMap.exemplars) {
+                if (exemplar === closest) {
+                    exemplar.vector = exemplar.vector * (1 - learningRate) + vector * learningRate
+                } else {
+                    exemplar.vector = exemplar.vector * (1 + learningRate) - vector * learningRate
+                }
+            }
+        }
+    }
+
+
+    private data class DistancedExemplar(public val exemplar: CohonenExemplar, public val distance: Double)
 }
