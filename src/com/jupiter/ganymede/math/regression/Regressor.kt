@@ -15,7 +15,7 @@ import java.util.function.Function
  * *
  * @param
  */
-FunctionalInterface
+@FunctionalInterface
 public interface Regressor<T : Number, F : Number> {
 
     public fun bestFit(points: Set<Point<T, F>>): Function<T, F>

@@ -80,13 +80,13 @@ public class SingleVariableTableFunction : SingleVariableRealFunction {
         if (this.points.isEmpty()) {
             return 0.0
         } // If there is one point, that is the value
-        else if (this.points.size() == 1) {
+        else if (this.points.size == 1) {
             return this.points.get(0).y
         }
 
         if (value >= this.domainMax) {
-            val penultPoint = this.points.get(this.points.size() - 2)
-            val finalPoint = this.points.get(this.points.size() - 1)
+            val penultPoint = this.points.get(this.points.size - 2)
+            val finalPoint = this.points.get(this.points.size - 1)
             val finalSlope = (finalPoint.y - penultPoint.y) / (finalPoint.x - penultPoint.x)
             val change = finalSlope * (value - finalPoint.x)
             return (finalPoint.y + change)
@@ -110,11 +110,11 @@ public class SingleVariableTableFunction : SingleVariableRealFunction {
     }
 
     public fun indexOfPointSmallerThan(value: Double): Int {
-        var upperBound = points.size() - 1
+        var upperBound = points.size - 1
         var lowerBound = 0
         var guess = (upperBound + lowerBound) / 2
 
-        val startGuess: Int
+        var startGuess: Int = 0
         var guessRepeated = false
 
         while (!((points.get(guess).x < value) && (points.get(guess + 1).x > value)) && !guessRepeated) {

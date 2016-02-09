@@ -13,7 +13,7 @@ import java.util.EventListener
  * *
  * @param
  */
-FunctionalInterface
+@FunctionalInterface
 public interface Listener<T> : EventListener {
 
     public fun handle(value: T)

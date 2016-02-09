@@ -12,7 +12,7 @@ import java.util.Objects
 
  * @author Nathan Templon
  */
-public class Plane3 @jvmOverloads constructor(normal: Vector3 = Vector3(1.0, 0.0, 0.0)) {
+public class Plane3 @JvmOverloads constructor(normal: Vector3 = Vector3(1.0, 0.0, 0.0)) {
 
     // Fields
     public val normal: Vector3

@@ -11,5 +11,5 @@ import java.util.function.Function
 
  * @author Nathan Templon
  */
-FunctionalInterface
+@FunctionalInterface
 public interface SingleVariableRealFunction : Function<Double, Double>

@@ -23,7 +23,7 @@ public class Matrix(private val values: Array<DoubleArray>) {
     public val width: Int
     public val dimension: Dimension
 
-    private val norm = Property<Double>()
+    private val norm = Property<Double?>(null)
     private var hasCalculatedInverseRref: Boolean = false
     private var inverse: Matrix? = null
     private var rrefMatrix: Matrix? = null
@@ -56,8 +56,8 @@ public class Matrix(private val values: Array<DoubleArray>) {
         if (!Matrix.isLegal(values)) {
             throw IllegalArgumentException()
         }
-        this.height = values.size()
-        this.width = values[0].size()
+        this.height = values.size
+        this.width = values[0].size
         this.dimension = Dimension(this.width, this.height)
 
         this.norm.set(null)
@@ -401,18 +401,18 @@ public class Matrix(private val values: Array<DoubleArray>) {
 
         // Private Static Methods
         private fun isLegal(values: Array<DoubleArray>): Boolean {
-            if (values.size() <= 0) {
+            if (values.size <= 0) {
                 return false
             }
 
-            val width = values[0].size()
+            val width = values[0].size
 
             if (width <= 0) {
                 return false
             }
 
             for (value in values) {
-                if (value.size() != width) {
+                if (value.size != width) {
                     return false
                 }
             }
@@ -422,7 +422,7 @@ public class Matrix(private val values: Array<DoubleArray>) {
         private fun rowBelowWithLargestValue(values: Array<DoubleArray>, column: Int, startRow: Int): Int {
             var largestMagnitude = 0.0
             var rowOfLargest = -1
-            for (i in startRow..values.size() - 1) {
+            for (i in startRow..values.size - 1) {
                 if (Math.abs(values[i][column]) > largestMagnitude) {
                     largestMagnitude = Math.abs(values[i][column])
                     rowOfLargest = i
@@ -438,13 +438,13 @@ public class Matrix(private val values: Array<DoubleArray>) {
         }
 
         private fun addMultOfRow(values: Array<DoubleArray>, row1: Int, row2: Int, scalar: Double) {
-            for (j in 0..values[0].size() - 1) {
+            for (j in 0..values[0].size - 1) {
                 values[row2][j] += values[row1][j] * scalar
             }
         }
 
         private fun multiplyRow(values: Array<DoubleArray>, row: Int, scalar: Double) {
-            for (j in 0..values[0].size() - 1) {
+            for (j in 0..values[0].size - 1) {
                 values[row][j] = values[row][j] * scalar
             }
         }

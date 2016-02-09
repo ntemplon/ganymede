@@ -7,7 +7,7 @@ package com.jupiter.ganymede.math.vector
 
 import com.jupiter.ganymede.math.geometry.Angle
 import com.jupiter.ganymede.math.matrix.Matrix
-import java.util.Arrays
+import java.util.*
 
 /**
 
@@ -29,7 +29,7 @@ public open class Vector(vararg values: Double) {
         return this.values[component - 1]
     }
 
-    public fun get(component: Int): Double {
+    public operator fun get(component: Int): Double {
         return this.getComponent(component)
     }
 
@@ -40,12 +40,12 @@ public open class Vector(vararg values: Double) {
 
     init {
         this.values = values
-        this.dimension = this.values.size()
+        this.dimension = this.values.size
     }
 
 
     // Public Methods
-    public open fun plus(other: Vector?): Vector {
+    public open operator fun plus(other: Vector?): Vector {
         if (other == null || other.dimension != this.dimension) {
             throw IllegalArgumentException()
         }
@@ -57,11 +57,11 @@ public open class Vector(vararg values: Double) {
         return Vector(*newValues)
     }
 
-    public open fun minus(other: Vector): Vector {
+    public open operator fun minus(other: Vector): Vector {
         return this.plus(other.times(-1.0))
     }
 
-    public open fun times(scalar: Double): Vector {
+    public open operator fun times(scalar: Double): Vector {
         val newValues = DoubleArray(this.dimension)
         for (i in 1..this.dimension) {
             newValues[i - 1] = this.getComponent(i) * scalar
@@ -69,7 +69,7 @@ public open class Vector(vararg values: Double) {
         return Vector(*newValues)
     }
 
-    public open fun times(matrix: Matrix): Matrix {
+    public open operator fun times(matrix: Matrix): Matrix {
         if (this.dimension != matrix.height) {
             throw IllegalArgumentException("Matrix and Vector dimensions not valid for multiplication.")
         }

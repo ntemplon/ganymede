@@ -17,21 +17,31 @@ public class Event<T> {
 
     // Fields
     private val listeners = LinkedHashSet<Listener<T>>()
+    private val funcListeners = LinkedHashSet<(T) -> Unit>()
 
 
     // Public Methods
-    public fun addListener(listener: Listener<T>): Boolean {
-        return this.listeners.add(listener)
-    }
-
-    public fun removeListener(listener: Listener<T>): Boolean {
-        return this.listeners.remove(listener)
-    }
+    public fun addListener(listener: (T) -> Unit): Boolean = this.funcListeners.add(listener)
+    public fun addListener(listener: Listener<T>): Boolean = this.listeners.add(listener)
+    public fun removeListener(listener: (T) -> Unit): Boolean = this.funcListeners.remove(listener)
+    public fun removeListener(listener: Listener<T>): Boolean = this.listeners.remove(listener)
 
     public fun dispatch(event: T) {
-        this.listeners.iterator().asSequence().forEach {
-            listener -> listener.handle(event)
+        this.funcListeners.forEach {listener ->
+            listener(event)
+        }
+        this.listeners.forEach { listener ->
+            listener.handle(event)
         }
     }
 
-}// Initialization
+}
+
+public class EventWrapper<T>(private val event: Event<T>) {
+
+    public fun addListener(listener: (T) -> Unit): Boolean = this.event.addListener(listener)
+    public fun addListener(listener: Listener<T>): Boolean = this.event.addListener(listener)
+    public fun removeListener(listener: (T) -> Unit): Boolean = this.event.removeListener(listener)
+    public fun removeListener(listener: Listener<T>): Boolean = this.event.removeListener(listener)
+
+}

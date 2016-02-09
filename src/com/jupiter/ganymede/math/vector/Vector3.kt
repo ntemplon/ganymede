@@ -12,7 +12,7 @@ import com.jupiter.ganymede.math.geometry.Plane3
 
  * @author Nathan Templon
  */
-public class Vector3 @jvmOverloads constructor(public val x: Double = 0.0, public val y: Double = 0.0, public val z: Double = 0.0) : Vector(x, y, z) {
+public class Vector3 @JvmOverloads constructor(public val x: Double = 0.0, public val y: Double = 0.0, public val z: Double = 0.0) : Vector(x, y, z) {
 
 
     // Properties

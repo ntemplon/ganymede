@@ -17,8 +17,8 @@ public class LinearRegressor : Regressor<Double, Double> {
         val firstMean = points.map { it.first }.average()
         val secondMean = points.map { it.second }.average()
 
-        val firstVariance = points.map { (it.first - firstMean) * (it.first - firstMean) }.sum() / (points.size() - 1)
-        val secondVariance = points.map { (it.second - secondMean) * (it.second - secondMean) }.sum() / (points.size() - 1)
+        val firstVariance = points.map { (it.first - firstMean) * (it.first - firstMean) }.sum() / (points.size - 1)
+        val secondVariance = points.map { (it.second - secondMean) * (it.second - secondMean) }.sum() / (points.size - 1)
 
         val firstStdDev = Math.sqrt(firstVariance);
         val secondStdDev = Math.sqrt(secondVariance);

@@ -25,8 +25,8 @@ public class KohonenMap(private val distance: (Vector, Vector) -> Double, exempl
     // Public Methods
     override fun categorize(vector: Vector): KohonenExemplar {
         return this.exemplars.map { exemplar ->
-            DistancedExemplar(exemplar, this.distance.invoke(exemplar.vector, vector))
-        }.reduce { first: DistancedExemplar, second: DistancedExemplar ->
+            DistancedExemplar(exemplar, this.distance(exemplar.vector, vector))
+        }.reduce { first, second ->
             if (first.distance < second.distance) {
                 first
             } else {
@@ -39,7 +39,7 @@ public class KohonenMap(private val distance: (Vector, Vector) -> Double, exempl
     // Static Methods
     companion object {
         private fun commonDimension(vectors: Collection<Vector>): Int {
-            var dim: Int = 0
+            var dim = 0
             var first = true
             var conflicted = false
             for (vector in vectors) {
@@ -62,57 +62,10 @@ public class KohonenMap(private val distance: (Vector, Vector) -> Double, exempl
 
 
     // Inner Classes
-    public data class KohonenExemplar(vector: Vector, public val coordinate: Int) : Exemplar {
-        // Properties
-        override var vector: Vector = vector
-            internal set
-
+    public class KohonenExemplar(override var vector: Vector, public val coordinate: Int) : Exemplar {
         // Public Methods
         override fun toString(): String {
-            return "CohonenExemplar(vector=" + this.vector.toString() + ", coordinate=" + this.coordinate.toString() + ")"
-        }
-    }
-
-
-    public inner class KohonenTrainer(public val learningRate: (Int) -> Double, public val trainingVectors: Collection<Vector>) {
-        // Properties
-        public var epochsTrained: Int = 0
-            private set
-
-
-        // Initialization
-        public constructor(learningRate: Double, trainingVectors: Collection<Vector>) : this({ epoch -> learningRate }, trainingVectors)
-
-
-        // Public Methods
-        public fun train(epochs: Int) {
-            for (i in 1..epochs) {
-                this.trainEpoch()
-            }
-        }
-
-
-        // Private Methods
-        private fun trainEpoch() {
-            this.epochsTrained++
-            val learnRate = this.learningRate(this.epochsTrained)
-
-            val trainingOrder = this.trainingVectors.toArrayList()
-            Collections.shuffle(trainingOrder)
-            for (vector in trainingOrder) {
-                this.trainVector(vector, learnRate)
-            }
-        }
-
-        private fun trainVector(vector: Vector, learningRate: Double) {
-            val closest = this@KohonenMap.categorize(vector)
-            for (exemplar in this@KohonenMap.exemplars) {
-                if (exemplar === closest) {
-                    exemplar.vector = exemplar.vector * (1 - learningRate) + vector * learningRate
-                } else {
-                    exemplar.vector = exemplar.vector * (1 + learningRate) - vector * learningRate
-                }
-            }
+            return "KohonenExemplar(vector=" + this.vector.toString() + ", coordinate=" + this.coordinate.toString() + ")"
         }
     }
 

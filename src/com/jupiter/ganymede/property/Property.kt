@@ -14,49 +14,41 @@ import com.jupiter.ganymede.event.Listener
  * *
  * @param
  */
-public class Property<T>
-/**
- * Initializes a property with the given initial value.
-
- * @param initialValue
- */
-@jvmOverloads constructor(initialValue: T? = null) {
+class Property<T>(initialValue: T) {
 
     // Events
     private val changed = Event<PropertyChangedArgs<T>>()
 
 
     // Fields
-    private var value: T? = null
+    private var value: T = initialValue
     private var binding: PropertyBinding<T>? = null
 
-    init {
-        this.value = initialValue
-    }
 
-
-    public fun get(): T? = this.value
+    fun get(): T = this.value
 
     /**
      * Sets the value of the Property.
 
      * @param value
      */
-    public fun set(value: T?) {
-        val oldValue: T? = this.value
+    fun set(value: T) {
+        val oldValue: T = this.value
         this.value = value
 
-        if ((oldValue != null && oldValue != this.value) || (oldValue == null && this.value != null))
-        {
-            this.changed.dispatch(PropertyChangedArgs(this, oldValue, this.value))
+        if ((oldValue != null && oldValue != this.value) || (oldValue == null && this.value != null)) {
+            this.changed.dispatch(PropertyChangedArgs(
+                    property = this,
+                    newValue = value,
+                    oldValue = oldValue))
         }
     }
 
-    public fun addPropertyChangedListener(listener: Listener<PropertyChangedArgs<T>>): Boolean {
+    fun addPropertyChangedListener(listener: (PropertyChangedArgs<T>) -> Unit): Boolean {
         return this.changed.addListener(listener)
     }
 
-    public fun removePropertyChangedListener(listener: Listener<PropertyChangedArgs<T>>): Boolean {
+    fun removePropertyChangedListener(listener: (PropertyChangedArgs<T>) -> Unit): Boolean {
         return this.changed.removeListener(listener)
     }
 
@@ -65,8 +57,8 @@ public class Property<T>
 
      * @param other
      */
-    public fun bind(other: Property<T>) {
-        this.bind(PropertyBinding({ -> other.get()}))
+    fun bind(other: Property<T>) {
+        this.bind(PropertyBinding({ other.get() }))
     }
 
     /**
@@ -74,7 +66,7 @@ public class Property<T>
 
      * @param binding
      */
-    public fun bind(binding: PropertyBinding<T>) {
+    fun bind(binding: PropertyBinding<T>) {
         this.unbind()
         this.binding = binding
         this.binding?.bind(this)
@@ -83,7 +75,7 @@ public class Property<T>
     /**
      * Removes the current binding from the property.
      */
-    public fun unbind() {
+    fun unbind() {
         if (this.binding != null) {
             this.binding?.unbind()
             this.binding = null
@@ -92,5 +84,7 @@ public class Property<T>
 
 
     // Inner Classes
-    data public class PropertyChangedArgs<T>(public val property: Property<T>, public val oldValue: T?, public val newValue: T?)
+    data class PropertyChangedArgs<T>(val property: Property<T>, val oldValue: T, val newValue: T)
+
+    interface PropertyListener<T> : Listener<PropertyChangedArgs<T>>
 }

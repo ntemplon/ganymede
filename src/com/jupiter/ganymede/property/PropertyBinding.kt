@@ -5,7 +5,6 @@
  */
 package com.jupiter.ganymede.property
 
-import com.jupiter.ganymede.event.Listener
 import com.jupiter.ganymede.property.Property.PropertyChangedArgs
 
 /**
@@ -14,21 +13,19 @@ import com.jupiter.ganymede.property.Property.PropertyChangedArgs
  * *
  * @param
  */
-public class PropertyBinding<T>(private val binding: () -> T?, vararg dependencies: Property<out Any>) : Listener<PropertyChangedArgs<out Any>> {
+public class PropertyBinding<T>(private val binding: () -> T, vararg dependencies: Property<out Any>) {
 
     // Fields
     private var property: Property<T>? = null
     private val dependencies: Array<out Property<out Any>>
+    private val handle: (PropertyChangedArgs<out Any>) -> Unit =
+            {
+                this.property?.set(this.binding.invoke())
+            }
 
 
     init {
         this.dependencies = dependencies
-    }
-
-
-    // Public Methods
-    override fun handle(value: PropertyChangedArgs<out Any>) {
-        this.property?.set(this.binding.invoke())
     }
 
 
@@ -37,14 +34,14 @@ public class PropertyBinding<T>(private val binding: () -> T?, vararg dependenci
         this.property = property
         this.property?.set(this.binding.invoke())
         for (dependency in this.dependencies) {
-            dependency.addPropertyChangedListener(this)
+            dependency.addPropertyChangedListener(this.handle)
         }
     }
 
     fun unbind() {
         this.property = null
         for (dependency in this.dependencies) {
-            dependency.removePropertyChangedListener(this)
+            dependency.removePropertyChangedListener(this.handle)
         }
     }
 
